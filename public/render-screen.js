@@ -1,4 +1,4 @@
-export default function renderScreen(screen, game, requestAnimationFrame, currentPlayerId) {
+export default function renderScreen(screen, scoreTable, game, requestAnimationFrame, currentPlayerId) {
     const context = screen.getContext('2d')
     context.fillStyle = 'white'
     context.clearRect(0, 0, 10, 10)
@@ -22,7 +22,31 @@ export default function renderScreen(screen, game, requestAnimationFrame, curren
         context.fillRect(currentPlayer.x, currentPlayer.y, 1, 1)
     }
 
+    updateScoreTable(scoreTable, game.state.players, currentPlayerId);
+
     requestAnimationFrame(() => {
-        renderScreen(screen, game, requestAnimationFrame, currentPlayerId)
+        renderScreen(screen, scoreTable, game, requestAnimationFrame, currentPlayerId)
     })
+}
+
+function updateScoreTable(scoreTable, players, currentPlayerId) {
+    let scoreTableInnerHTML = `
+        <tr>
+            <td>player</td>
+            <td>score</td>
+        </tr>
+    `
+
+    for (const playerId in players) {
+        scoreTableInnerHTML += `
+            <tr>
+                <td>${playerId}</td>
+                <td>${players[playerId].score}</td>
+            </tr>
+        `
+    }
+
+
+
+    scoreTable.innerHTML = scoreTableInnerHTML
 }
